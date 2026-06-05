@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宏兴的博客 || 函数调用惯例实验报告</title>
+    <meta name="author" content="宏兴">
+    <meta name="description" content=" ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/images/PY.png">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/full-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">宏兴的博客</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>首页</span>
+        </a>
+        
+        <a href="/about">
+            <span>
+                <a-icon type="idcard" theme="filled" />
+            </span>
+            <span>关于</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>归档</span>
+        </a>
+        
+        <a href="/categories">
+            <span>
+                <a-icon type="book" theme="filled" />
+            </span>
+            <span>分类</span>
+        </a>
+        
+        <a href="/tags">
+            <span>
+                <a-icon type="tags" theme="filled" />
+            </span>
+            <span>标签</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>宏兴的博客</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">首页</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="idcard" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">关于</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">归档</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="book" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">分类</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="tags" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">标签</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1>函数调用惯例实验报告 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2026/6/5
+        </span>
+
+        
+        <span class="category">
+            <a href="/categories/课程作业">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                课程作业
+            </a>
+        </span>
+        
+
+        
+
+        <span class="tags">
+            <span class="icon">
+                <a-icon type="tags" theme="filled" />
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/逆向工程" style=color:#00a596>
+                    逆向工程
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/编译原理" style=color:#03a9f4>
+                    编译原理
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/汇编" style=color:#00bcd4>
+                    汇编
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+
+    <div class="content" v-pre>
+        <h1 id="编译原理作业2-——-函数调用惯例"><a href="#编译原理作业2-——-函数调用惯例" class="headerlink" title="编译原理作业2 —— 函数调用惯例"></a>编译原理作业2 —— 函数调用惯例</h1><p><strong>学号：</strong> 2023240381006<br><strong>姓名：</strong> 殷为</p>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#%E4%B8%80%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92">函数参数传递</a></li>
+<li><a href="#%E4%BA%8C%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC">函数返回值</a></li>
+<li><a href="#%E4%B8%89%E7%BB%BC%E5%90%88%E5%88%86%E6%9E%90%E9%A2%98">综合分析题</a></li>
+</ol>
+<hr>
+<h2 id="一、函数参数传递"><a href="#一、函数参数传递" class="headerlink" title="一、函数参数传递"></a>一、函数参数传递</h2><p>函数参数通过栈进行传递，传参的顺序为从右到左的顺序依次入栈。访问参数采用 <code>ebp</code> 寻址方式，由于进入函数时，已经将 <code>ebp</code> 调整至栈底，因此可以直接使用。下面通过案例，分析函数参数传递及函数内获取参数的具体实现。</p>
+<h3 id="步骤-1：编写-C-语言代码"><a href="#步骤-1：编写-C-语言代码" class="headerlink" title="步骤 1：编写 C 语言代码"></a>步骤 1：编写 C 语言代码</h3><p>保存文件名为 <code>varfunc06.c</code>（学号后两位：06），代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = i;</span><br><span class="line">    <span class="type">int</span> b = j;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> j = <span class="number">2</span>;</span><br><span class="line">    add(i, j);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤-2：编译与反汇编"><a href="#步骤-2：编译与反汇编" class="headerlink" title="步骤 2：编译与反汇编"></a>步骤 2：编译与反汇编</h3><p>执行以下命令编译代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 -g func.c -o func06</span><br></pre></td></tr></table></figure>
+
+<p>使用 Pwndbg（或其它工具）调试程序，并执行 <code>disassemble main</code> 命令。</p>
+<blockquote>
+<p><strong>【图 2-1】</strong> 执行 <code>disassemble main</code> 的结果</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-1_disassemble_main.png"></p>
+</blockquote>
+<p>由图可知，<code>main</code> 函数中核心代码对应的汇编为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0x000011c3 &lt;+16&gt;: mov  dword ptr [ebp-0x8], 0x1</span><br><span class="line">0x000011ca &lt;+23&gt;: mov  dword ptr [ebp-0x4], 0x2</span><br><span class="line">0x000011d1 &lt;+30&gt;: push dword ptr [ebp-0x4]</span><br><span class="line">0x000011d4 &lt;+33&gt;: push dword ptr [ebp-0x8]</span><br><span class="line">0x000011d7 &lt;+36&gt;: call 0x118d &lt;add&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤-3：逐步执行查看寄存器"><a href="#步骤-3：逐步执行查看寄存器" class="headerlink" title="步骤 3：逐步执行查看寄存器"></a>步骤 3：逐步执行查看寄存器</h3><p>多次执行 <code>n</code> 命令，直至执行到 <code>add(i, j)</code>，查看寄存器。</p>
+<blockquote>
+<p><strong>【图 2-2】</strong> 寄存器状态截图</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-2_%E5%AF%84%E5%AD%98%E5%99%A8%E7%8A%B6%E6%80%81.png"></p>
+</blockquote>
+<p>由图可知，系统执行了步骤 3 中 <code>main</code> 函数的核心指令，且：</p>
+<ul>
+<li><code>ebp</code> 地址为 <code>0xffffd1a8</code></li>
+<li><code>0xffffd1a4</code> 地址存储 <code>0x2</code>（即参数 <code>j</code>）</li>
+<li><code>0xffffd1a0</code> 地址存储 <code>0x1</code>（即参数 <code>i</code>）</li>
+<li><code>esp</code> 为 <code>0xffffd198</code></li>
+</ul>
+<h3 id="步骤-4：查看-add-函数的汇编代码"><a href="#步骤-4：查看-add-函数的汇编代码" class="headerlink" title="步骤 4：查看 add 函数的汇编代码"></a>步骤 4：查看 add 函数的汇编代码</h3><p>执行 <code>disassemble add</code>，查看 <code>add</code> 函数对应的汇编代码。</p>
+<blockquote>
+<p><strong>【图 2-3】</strong> <code>disassemble add</code> 结果</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-3_disassemble_add.png"></p>
+</blockquote>
+<p>由图可知，<code>add</code> 函数获取调用函数传递参数命令为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x5655619d &lt;+16&gt;: mov  eax, DWORD PTR [ebp+0x8]</span><br><span class="line">0x565561a3 &lt;+22&gt;: mov  eax, DWORD PTR [ebp+0xc]</span><br></pre></td></tr></table></figure>
+
+<h3 id="步骤-5：进入-add-函数查看寄存器"><a href="#步骤-5：进入-add-函数查看寄存器" class="headerlink" title="步骤 5：进入 add 函数查看寄存器"></a>步骤 5：进入 add 函数查看寄存器</h3><p>执行 <code>s</code> 命令，进入 <code>add</code> 函数，查看寄存器。</p>
+<blockquote>
+<p><strong>【图 2-4】</strong> 进入 add 函数后的寄存器状态</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-4_%E8%BF%9B%E5%85%A5add%E5%87%BD%E6%95%B0%E5%AF%84%E5%AD%98%E5%99%A8.png"></p>
+</blockquote>
+<p><strong>分析：</strong></p>
+<ul>
+<li>步骤 3 中，<code>main</code> 函数 <code>esp</code> 地址为 <code>0xffffd178</code>。</li>
+<li>步骤 2 中的 <code>push dword ptr [ebp-0x4]</code> 和 <code>push dword ptr [ebp-0x8]</code> 指令，将 <code>0xffffd194</code> 和 <code>0xffffd190</code> 分别赋值为 <code>0x2</code>、<code>0x1</code>，说明 <strong>函数参数从右向左依次入栈</strong>。</li>
+<li>新的 <code>ebp</code> 为 <code>0xffffd188</code>。</li>
+<li>步骤 4 中汇编代码的 <code>ebp+0x8</code> 为 <code>0xffffd190</code>，<code>ebp+0xc</code> 为 <code>0xffffd194</code>，获取到之前压入栈的值，该值为 <code>main</code> 函数中值的<strong>副本</strong>。</li>
+<li><code>0xffffd18c</code> 存储 <code>add</code> 函数执行完返回到 <code>main</code> 函数的地址 <code>0x565561dc</code>（后续关于栈溢出，关键就是修改返回地址）。</li>
+</ul>
+<h3 id="步骤-6：VS-环境（或-IDA）对比"><a href="#步骤-6：VS-环境（或-IDA）对比" class="headerlink" title="步骤 6：VS 环境（或 IDA）对比"></a>步骤 6：VS 环境（或 IDA）对比</h3><p>在 VS 环境中（或用 IDA 工具），查看 C 代码对应的汇编。</p>
+<blockquote>
+<p><strong>【图 2-5】</strong> VS 环境下的反汇编结果</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-5_VS%E5%8F%8D%E6%B1%87%E7%BC%96%E5%AF%B9%E6%AF%94.png"></p>
+</blockquote>
+<p>由图可知，<strong>VS 和 GCC 编译出的函数初始化的汇编代码思路一致</strong>。</p>
+<hr>
+<h2 id="二、函数返回值"><a href="#二、函数返回值" class="headerlink" title="二、函数返回值"></a>二、函数返回值</h2><p>调用函数使用 <code>call</code> 指令，函数返回使用 <code>ret</code> 指令。函数返回值为基本数据类型或者 <code>sizeof</code> 小于等于 4 的自定义类型，通过 <code>eax</code> 寄存器传递。由于 <code>eax</code> 寄存器只能保存 4 字节数据，因此大于 4 字节的数据将使用其他方法传递。</p>
+<h3 id="案例-1：基本类型返回值（通过-eax）"><a href="#案例-1：基本类型返回值（通过-eax）" class="headerlink" title="案例 1：基本类型返回值（通过 eax）"></a>案例 1：基本类型返回值（通过 eax）</h3><h4 id="步骤-1：编写-C-语言代码-1"><a href="#步骤-1：编写-C-语言代码-1" class="headerlink" title="步骤 1：编写 C 语言代码"></a>步骤 1：编写 C 语言代码</h4><p>保存文件名为 <code>retfunc.c</code>，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-2：编译与反汇编-1"><a href="#步骤-2：编译与反汇编-1" class="headerlink" title="步骤 2：编译与反汇编"></a>步骤 2：编译与反汇编</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 -g retfunc.c -o retfunc</span><br></pre></td></tr></table></figure>
+
+<p>使用 Pwndbg 调试程序，执行 <code>disassemble main</code> 命令。</p>
+<blockquote>
+<p><strong>【图 2-6】</strong> <code>disassemble main</code> 结果</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-6_retfunc_disassemble_main.png"></p>
+</blockquote>
+<p>由图可知，<code>main+3</code> 行指令将返回值 <code>0x0</code> 存储在 <code>eax</code> 寄存器。</p>
+<h4 id="步骤-3：VS-环境对比"><a href="#步骤-3：VS-环境对比" class="headerlink" title="步骤 3：VS 环境对比"></a>步骤 3：VS 环境对比</h4><p>在 VS 环境中，查看 C 代码对应的汇编代码。</p>
+<blockquote>
+<p><strong>【图 2-7】</strong> VS 环境下的返回值反汇编</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-7_VS%E8%BF%94%E5%9B%9E%E5%80%BC%E5%8F%8D%E6%B1%87%E7%BC%96.png"></p>
+</blockquote>
+<p>由图可知，<strong>VS 和 GCC 编译出的函数返回值的汇编代码均通过 eax 传递</strong>。</p>
+<h3 id="案例-2：指针类型返回值（通过-eax）"><a href="#案例-2：指针类型返回值（通过-eax）" class="headerlink" title="案例 2：指针类型返回值（通过 eax）"></a>案例 2：指针类型返回值（通过 eax）</h3><h4 id="步骤-1：编写-C-语言代码-2"><a href="#步骤-1：编写-C-语言代码-2" class="headerlink" title="步骤 1：编写 C 语言代码"></a>步骤 1：编写 C 语言代码</h4><p>保存文件名为 <code>retfunp.c</code>，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span>* <span class="title function_">getStr</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> *p = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span>* p = getStr();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-2：编译与反汇编-2"><a href="#步骤-2：编译与反汇编-2" class="headerlink" title="步骤 2：编译与反汇编"></a>步骤 2：编译与反汇编</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -m32 -g retfunp.c -o retfunp</span><br></pre></td></tr></table></figure>
+
+<p>使用 Pwndbg 调试程序，执行 <code>disassemble /m getStr</code> 命令。</p>
+<blockquote>
+<p><strong>【图 2-8】</strong> <code>disassemble /m getStr</code> 结果</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-8_disassemble_getStr.png"></p>
+</blockquote>
+<p>由图可知，首先将字符串 <code>&quot;abc&quot;</code> 地址赋给 <code>[ebp-0x4]</code>，再赋给 <code>eax</code>，最后通过 <code>eax</code> 返回给调用函数。</p>
+<h4 id="步骤-3：VS-环境对比-1"><a href="#步骤-3：VS-环境对比-1" class="headerlink" title="步骤 3：VS 环境对比"></a>步骤 3：VS 环境对比</h4><p>在 VS 环境中，查看 C 代码对应的汇编代码。</p>
+<blockquote>
+<p><strong>【图 2-9】</strong> VS 环境下的指针返回反汇编</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE2-9_VS%E6%8C%87%E9%92%88%E8%BF%94%E5%9B%9E%E5%8F%8D%E6%B1%87%E7%BC%96.png"></p>
+</blockquote>
+<p>由图可知，<strong>VS 和 GCC 编译出的函数返回指针的汇编代码均通过 eax 传递</strong>。</p>
+<hr>
+<h2 id="三、综合分析题"><a href="#三、综合分析题" class="headerlink" title="三、综合分析题"></a>三、综合分析题</h2><h3 id="题目需求"><a href="#题目需求" class="headerlink" title="题目需求"></a>题目需求</h3><ol>
+<li>关闭优化，将以下程序 <code>callcanv06</code> 编译生成 <code>callcanv06.exe</code> 可执行文件。</li>
+<li>使用 OD 或 IDA 分析 <code>callcanv06.exe</code>，输入适当的 <code>i</code>、<code>j</code> 值，使程序输出 <code>success!</code>。</li>
+<li>保存关键步骤和结果，和前面的作业形成一个 word 文档。</li>
+</ol>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">func</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> m = <span class="number">0</span>; m &lt; <span class="number">10</span>; m++) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">func1</span><span class="params">(<span class="type">int</span> j)</span> &#123;</span><br><span class="line">    j = j + <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">return</span> j;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> &#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;请依次输入i、j的值（正整数），使程序输出 success!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;请输入i的值:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;i);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;请输入j的值:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;j);</span><br><span class="line">    i = func(i);</span><br><span class="line">    j = func1(j);</span><br><span class="line">    <span class="keyword">if</span>(i == <span class="number">15</span> &amp;&amp; j == <span class="number">10</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;success!\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;failed!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h3><h4 id="1、新建-C-文件"><a href="#1、新建-C-文件" class="headerlink" title="1、新建 C 文件"></a>1、新建 C 文件</h4><blockquote>
+<p><strong>【图 3-1】</strong> 新建源码文件</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE3-1_%E6%96%B0%E5%BB%BA%E6%BA%90%E7%A0%81%E6%96%87%E4%BB%B6.png"></p>
+</blockquote>
+<h4 id="2、编译程序"><a href="#2、编译程序" class="headerlink" title="2、编译程序"></a>2、编译程序</h4><blockquote>
+<p><strong>【图 3-2】</strong> 编译生成 exe</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE3-2_%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F.png"></p>
+</blockquote>
+<h4 id="3、用-x32dbg-打开程序"><a href="#3、用-x32dbg-打开程序" class="headerlink" title="3、用 x32dbg 打开程序"></a>3、用 x32dbg 打开程序</h4><blockquote>
+<p><strong>【图 3-3】</strong> x32dbg 调试界面</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE3-3_x32dbg%E8%B0%83%E8%AF%95.png"></p>
+</blockquote>
+<h4 id="4、静态分析确定答案"><a href="#4、静态分析确定答案" class="headerlink" title="4、静态分析确定答案"></a>4、静态分析确定答案</h4><p>通过分析源码中的逻辑：</p>
+<ul>
+<li><code>func(i)</code> 循环对 <code>i</code> 执行 10 次 <code>i++</code>，即 <code>func(i) = i + 10</code></li>
+<li><code>func1(j)</code> 执行 <code>j = j + 8</code>，即 <code>func1(j) = j + 8</code></li>
+<li>判定条件：<code>i == 15 &amp;&amp; j == 10</code></li>
+<li>因此：输入 <code>i = 5</code>，输入 <code>j = 2</code><ul>
+<li><code>func(5) = 5 + 10 = 15</code> ✅</li>
+<li><code>func1(2) = 2 + 8 = 10</code> ✅</li>
+</ul>
+</li>
+</ul>
+<p><strong>答案：</strong> <code>i = 5</code>，<code>j = 2</code></p>
+<blockquote>
+<p><strong>【图 3-4】</strong> 运行结果——输出 success</p>
+<p><img src="/images/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%83%AF%E4%BE%8B/%E5%9B%BE3-4_%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9Csuccess.png"></p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本次实验，深入理解了以下知识点：</p>
+<ol>
+<li><strong>函数参数传递机制</strong>：参数从右向左依次压栈，通过 <code>ebp + 偏移量</code> 进行访问。</li>
+<li><strong>函数返回值传递</strong>：<code>sizeof</code> ≤ 4 的类型及指针通过 <code>eax</code> 寄存器传递返回值。</li>
+<li><strong>GCC 与 VS 的汇编差异</strong>：虽然不同编译器生成的汇编代码细节不同，但整体思路保持一致。</li>
+<li><strong>逆向调试能力</strong>：通过 Pwndbg、x32dbg 等工具进行动态调试，验证理论与实际的对应关系。</li>
+</ol>
+
+    </div>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <div id="comment">
+        <div id="gitalk-container">
+        </div>
+    </div>
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2018 - 2026 宏兴的博客
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @宏兴
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: 'hexo-theme-particle',      // The repository of store comments,
+        owner: 'korilin',
+        admin: ['korilin'],
+        language: 'zh-CN',
+        id: location.pathname,      // Ensure uniqueness and length less than 50
+        distractionFreeMode: true  // Facebook-like distraction free mode
+    })
+    gitalk.render('gitalk-container')
+</script>
+
+</body>
+
+</html>
